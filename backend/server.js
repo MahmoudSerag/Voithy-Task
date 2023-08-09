@@ -39,10 +39,8 @@ app.use(helmet());
 app.use((req, res) => {
   return res.status(404).json({
     success: false,
-    error: {
-      code: 404,
-      message: 'Url Not Found.',
-    },
+    statusCode: 404,
+    message: 'Url Not Found.',
   });
 });
 
