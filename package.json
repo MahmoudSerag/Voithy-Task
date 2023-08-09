@@ -1,0 +1,27 @@
+{
+  "name": "voithy-task",
+  "version": "1.0.0",
+  "description": "Our project aims to create an integrated patient profile system that empowers medical caregivers and patients alike. Medical caregivers can securely log in to access patient profiles, update information, add notes, medications, and more. Any modifications trigger automated email notifications to patients, keeping them informed. Patients can easily log in to review the updated data, fostering transparency and active participation in their care. This system optimizes medical data management, communication, and patient engagement for enhanced healthcare outcomes.",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
+  },
+  "keywords": [],
+  "author": "Mahmoud Serag",
+  "license": "MIT license",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "http-errors": "^2.0.0",
+    "joi": "^17.9.2",
+    "mongoose": "^7.4.2",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
