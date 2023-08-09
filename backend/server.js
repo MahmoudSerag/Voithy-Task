@@ -1,4 +1,5 @@
 const express = require('express');
+const { connectDB } = require('./config/db');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const xss = require('xss-clean');
@@ -8,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const { handleError } = require('./middlewares/errorHandling');
 
 dotenv.config();
+connectDB();
 
 const app = express();
 
