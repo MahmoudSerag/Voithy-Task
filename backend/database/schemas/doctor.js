@@ -12,6 +12,8 @@ const DoctorSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      unique: true,
+      index: true,
       required: true,
     },
     password: {
