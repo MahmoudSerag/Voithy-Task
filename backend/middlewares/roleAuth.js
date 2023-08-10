@@ -12,8 +12,7 @@ exports.isRolePatient = asyncHandler(async (req, res, next) => {
 });
 
 exports.isRoleDoctor = asyncHandler(async (req, res, next) => {
-  const accessToken = req.cookies.accessToken;
-  const decodedToken = await verifyJWT(accessToken);
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
 
   if (decodedToken.role !== 'doctor')
     return next(new httpErrors(403, 'Forbidden.'));

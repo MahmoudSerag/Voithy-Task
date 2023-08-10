@@ -8,8 +8,8 @@ const asyncHandler = require('../middlewares/async');
 const {
   validateDoctorInputs,
   validatePatientInputs,
-} = require('../utils/registerValidation');
-const { validateLoginInputs } = require('../utils/loginValidation');
+  validateLoginInputs,
+} = require('../utils/inputsValidationService');
 const { setCookie } = require('../utils/cookieService');
 const { signJWT } = require('../utils/jwtService');
 const { hashPassword, comparePassword } = require('../utils/passwordService');

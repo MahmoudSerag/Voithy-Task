@@ -5,6 +5,7 @@ const {
   getAllDoctors,
   subscribeToDoctor,
   updatePatientName,
+  sendNotification,
 } = require('../controller/user');
 
 const { checkUserAuthorization } = require('../middlewares/logger');
@@ -26,6 +27,13 @@ router.patch(
   checkUserAuthorization,
   isRoleDoctor,
   updatePatientName
+);
+
+router.post(
+  '/doctors/notification/:patientId',
+  checkUserAuthorization,
+  isRoleDoctor,
+  sendNotification
 );
 
 module.exports = router;
