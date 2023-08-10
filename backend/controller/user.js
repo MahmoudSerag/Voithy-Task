@@ -73,14 +73,17 @@ exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
 exports.updatePatientName = asyncHandler(async (req, res, next) => {
   const decodedToken = await verifyJWT(req.cookies.accessToken);
 
-  const patient = await findPatientById(req.params.patientId);
+  const patientDoctor = await findPatientById(
+    req.params.patientId,
+    decodedToken.userId
+  );
 
-  if (!patient) return next(new httpErrors(404, 'Patient not found.'));
+  if (!patientDoctor) return next(new httpErrors(404, 'Patient not found.'));
 
-  if (patient.doctorId.toString() !== decodedToken.userId)
+  if (patientDoctor.doctorId.toString() !== decodedToken.userId)
     return next(new httpErrors(403, 'Forbidden.'));
 
-  await updatePatientName(patient, req.body);
+  await updatePatientName(patientDoctor, req.body);
 
   return res.status(201).json({
     success: true,

@@ -1,5 +1,6 @@
 const asyncHandler = require('../../middlewares/async');
 const Doctor = require('../schemas/doctor');
+const patient = require('../schemas/patient');
 const Patient = require('../schemas/patient');
 const PatientDoctor = require('../schemas/PatientDoctor');
 
@@ -53,13 +54,13 @@ exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
   await PatientDoctor.create({ patientId, doctorId });
 });
 
-exports.findPatientById = asyncHandler(async (patientId) => {
-  return await Patient.findById({ _id: patientId });
+exports.findPatientById = asyncHandler(async (patientId, doctorId) => {
+  return await PatientDoctor.findOne({
+    doctorId: doctorId,
+    patientId: patientId,
+  });
 });
 
-exports.updatePatientName = asyncHandler(async (patient, body) => {
-  patient.firstName = body.firstName;
-  patient.lastName = body.lastName;
-
-  await patient.save();
+exports.updatePatientName = asyncHandler(async (patientDoctor, body) => {
+  await Patient.findByIdAndUpdate({ _id: patientDoctor.patientId }, body);
 });
