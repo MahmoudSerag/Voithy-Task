@@ -1,4 +1,8 @@
-const { getUserProfile, getAllDoctors } = require('../database/models/user');
+const {
+  getUserProfile,
+  getAllDoctors,
+  subscribeToDoctor,
+} = require('../database/models/user');
 const httpErrors = require('http-errors');
 const asyncHandler = require('../middlewares/async');
 const {
@@ -42,5 +46,18 @@ exports.getAllDoctors = asyncHandler(async (req, res, next) => {
     statusCode: 200,
     message: 'Doctors fetched successfully.',
     doctors: doctors || [],
+  });
+});
+
+exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
+  const accessToken = req.cookies.accessToken;
+  const decodedToken = await verifyJWT(accessToken);
+
+  await subscribeToDoctor(decodedToken.userId, req.params.doctorId);
+
+  return res.status(201).json({
+    success: true,
+    statusCode: 201,
+    message: 'Patient subscribed to doctor successfully.',
   });
 });

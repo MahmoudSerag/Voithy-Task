@@ -9,7 +9,7 @@ exports.handleError = (err, req, res, next) => {
     error.statusCode = 401;
   }
 
-  if (error.message === 'Cast Error') {
+  if (error.message.startsWith('Cast')) {
     error.message = `Invalid id.`;
     error.statusCode = 400;
   }

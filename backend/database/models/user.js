@@ -41,3 +41,11 @@ exports.getAllDoctors = asyncHandler(async (page, limit) => {
     .limit(limit)
     .lean();
 });
+
+exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
+  const doctor = await Doctor.findById({ _id: doctorId }).lean();
+  const patient = await Patient.findById({ _id: patientId });
+
+  patient.doctorId = doctor._id;
+  patient.save();
+});
