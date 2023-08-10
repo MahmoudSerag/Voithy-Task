@@ -4,6 +4,7 @@ const {
   subscribeToDoctor,
   findPatientById,
   updatePatientName,
+  checkPatientSubscription,
 } = require('../database/models/user');
 const httpErrors = require('http-errors');
 const asyncHandler = require('../middlewares/async');
@@ -51,6 +52,14 @@ exports.getAllDoctors = asyncHandler(async (req, res, next) => {
 
 exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
   const decodedToken = await verifyJWT(req.cookies.accessToken);
+
+  const isPatientSubscribed = await checkPatientSubscription(
+    decodedToken.userId,
+    req.params.doctorId
+  );
+
+  if (isPatientSubscribed)
+    return next(new httpErrors(403, 'Already subscribed.'));
 
   await subscribeToDoctor(decodedToken.userId, req.params.doctorId);
 

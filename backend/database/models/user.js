@@ -1,6 +1,7 @@
 const asyncHandler = require('../../middlewares/async');
 const Doctor = require('../schemas/doctor');
 const Patient = require('../schemas/patient');
+const PatientDoctor = require('../schemas/PatientDoctor');
 
 exports.getUserProfile = asyncHandler(async (userId, role, page, limit) => {
   if (role === 'doctor') {
@@ -42,12 +43,12 @@ exports.getAllDoctors = asyncHandler(async (page, limit) => {
     .lean();
 });
 
-exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
-  const doctor = await Doctor.findById({ _id: doctorId }).lean();
-  const patient = await Patient.findById({ _id: patientId });
+exports.checkPatientSubscription = asyncHandler(async (patientId, doctorId) => {
+  return await PatientDoctor.findOne({ patientId, doctorId });
+});
 
-  patient.doctorId = doctor._id;
-  await patient.save();
+exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
+  await PatientDoctor.create({ patientId, doctorId });
 });
 
 exports.findPatientById = asyncHandler(async (patientId) => {
