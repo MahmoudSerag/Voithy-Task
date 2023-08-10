@@ -1,30 +1,12 @@
 const nodemailer = require('nodemailer');
-const path = require('path');
-const hbs = require('nodemailer-express-handlebars');
 const asyncHandler = require('../middlewares/async');
 
-const generateHandlebarOptions = () => {
-  const viewsPath = path.resolve('../Voithy-Task/backend/Views');
-
-  return {
-    viewEngine: {
-      extName: '.handlebars',
-      partialsDir: viewsPath,
-      defaultLayout: false,
-    },
-    viewPath: viewsPath,
-    extName: '.handlebars',
-  };
-};
-
-const generateMailOptions = asyncHandler((userMail) => {
+const generateMailOptions = asyncHandler((userMail, message) => {
   return {
     from: process.env.EMAIL_SENDER,
     to: userMail,
     subject: 'Important Notification: Stay Updated on Your Health Information.',
-    text: `Exciting news! We've introduced a notification system to keep you updated on vital health updates.`,
-    // template: 'email',
-    // context: { message },
+    html: `<h2>Exciting news! We've introduced a notification system to keep you updated on vital health updates.</h2><h3>Here's a message from your doctor:</h3><h3>Message: ${message}</h3>`,
   };
 });
 
@@ -39,13 +21,10 @@ const createTransport = asyncHandler(async () => {
   });
 });
 
-exports.sendMail = asyncHandler(async (userMail) => {
-  const mailOptions = await generateMailOptions(userMail);
-  console.log(mailOptions);
-  // const handlebarsOptions = generateHandlebarOptions();
-  const transport = await createTransport();
+exports.sendMail = asyncHandler(async (userMail, message) => {
+  const mailOptions = await generateMailOptions(userMail, message);
 
-  // transport.use('compile', hbs(handlebarsOptions));
+  const transport = await createTransport();
 
   await transport.sendMail(mailOptions);
 });

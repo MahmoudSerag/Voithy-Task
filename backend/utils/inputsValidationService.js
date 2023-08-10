@@ -42,3 +42,10 @@ exports.validateLoginInputs = (body) => {
   });
   return schema.validate(body);
 };
+
+exports.validateNotificationInputs = (body) => {
+  const schema = Joi.object({
+    message: Joi.string().required(),
+  });
+  return schema.validate(body);
+};

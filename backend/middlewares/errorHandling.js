@@ -1,6 +1,6 @@
 exports.handleError = (err, req, res, next) => {
   let error = { ...err };
-  console.log(err);
+
   error.message = err.message;
   error.statusCode = err.statusCode;
 

@@ -10,6 +10,9 @@ const asyncHandler = require('../middlewares/async');
 
 const { verifyJWT } = require('../utils/jwtService');
 const { sendMail } = require('../utils/emailService');
+const {
+  validateNotificationInputs,
+} = require('../utils/inputsValidationService');
 
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
   const page = Number(req.query.page) || 1,
@@ -78,6 +81,8 @@ exports.updatePatientName = asyncHandler(async (req, res, next) => {
 });
 
 exports.sendNotification = asyncHandler(async (req, res, next) => {
+  if (!req.body) return next(new httpErrors(400, 'Invalid request'));
+
   const decodedToken = await verifyJWT(req.cookies.accessToken);
 
   const patient = await findPatientById(req.params.patientId);
@@ -87,12 +92,14 @@ exports.sendNotification = asyncHandler(async (req, res, next) => {
   if (patient.doctorId.toString() !== decodedToken.userId)
     return next(new httpErrors(403, 'Forbidden.'));
 
-  const message = `Hello ${patient.firstName} ${patient.lastName}, you should take this course.`;
-  await sendMail(patient.email);
+  const { error } = validateNotificationInputs(req.body);
+  if (error) return next(new httpErrors(400, error.details[0].message));
+
+  await sendMail(patient.email, req.body.message);
 
   return res.status(201).json({
     success: true,
     statusCode: 201,
-    message,
+    message: req.body.message,
   });
 });
