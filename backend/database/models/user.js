@@ -47,5 +47,16 @@ exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
   const patient = await Patient.findById({ _id: patientId });
 
   patient.doctorId = doctor._id;
-  patient.save();
+  await patient.save();
+});
+
+exports.findPatientById = asyncHandler(async (patientId) => {
+  return await Patient.findById({ _id: patientId });
+});
+
+exports.updatePatientName = asyncHandler(async (patient, body) => {
+  patient.firstName = body.firstName;
+  patient.lastName = body.lastName;
+
+  await patient.save();
 });

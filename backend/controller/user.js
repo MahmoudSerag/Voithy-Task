@@ -2,23 +2,19 @@ const {
   getUserProfile,
   getAllDoctors,
   subscribeToDoctor,
+  findPatientById,
+  updatePatientName,
 } = require('../database/models/user');
 const httpErrors = require('http-errors');
 const asyncHandler = require('../middlewares/async');
-const {
-  validateDoctorInputs,
-  validatePatientInputs,
-} = require('../utils/registerValidation');
-const { validateLoginInputs } = require('../utils/loginValidation');
-const { setCookie } = require('../utils/cookieService');
+
 const { verifyJWT } = require('../utils/jwtService');
-const { hashPassword, comparePassword } = require('../utils/passwordService');
 
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
   const page = Number(req.query.page) || 1,
     limit = 10;
-  const accessToken = req.cookies.accessToken;
-  const decodedToken = await verifyJWT(accessToken);
+
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
 
   const user = await getUserProfile(
     decodedToken.userId,
@@ -50,8 +46,7 @@ exports.getAllDoctors = asyncHandler(async (req, res, next) => {
 });
 
 exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
-  const accessToken = req.cookies.accessToken;
-  const decodedToken = await verifyJWT(accessToken);
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
 
   await subscribeToDoctor(decodedToken.userId, req.params.doctorId);
 
@@ -59,5 +54,24 @@ exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
     success: true,
     statusCode: 201,
     message: 'Patient subscribed to doctor successfully.',
+  });
+});
+
+exports.updatePatientName = asyncHandler(async (req, res, next) => {
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
+
+  const patient = await findPatientById(req.params.patientId);
+
+  if (!patient) return next(new httpErrors(404, 'Patient not found.'));
+
+  if (patient.doctorId.toString() !== decodedToken.userId)
+    return next(new httpErrors(403, 'Forbidden.'));
+
+  await updatePatientName(patient, req.body);
+
+  return res.status(201).json({
+    success: true,
+    statusCode: 201,
+    message: 'Patient info updated successfully.',
   });
 });
