@@ -54,11 +54,17 @@ exports.subscribeToDoctor = asyncHandler(async (patientId, doctorId) => {
   await PatientDoctor.create({ patientId, doctorId });
 });
 
-exports.findPatientById = asyncHandler(async (patientId, doctorId) => {
-  return await PatientDoctor.findOne({
-    doctorId: doctorId,
-    patientId: patientId,
-  });
+exports.findPatientDoctorRelation = asyncHandler(
+  async (patientId, doctorId) => {
+    return await PatientDoctor.findOne({
+      doctorId: doctorId,
+      patientId: patientId,
+    });
+  }
+);
+
+exports.findPatientById = asyncHandler(async (patientId) => {
+  return await Patient.findById({ _id: patientId }).lean();
 });
 
 exports.updatePatientName = asyncHandler(async (patientDoctor, body) => {

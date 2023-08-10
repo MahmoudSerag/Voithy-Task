@@ -2,6 +2,7 @@ const {
   getUserProfile,
   getAllDoctors,
   subscribeToDoctor,
+  findPatientDoctorRelation,
   findPatientById,
   updatePatientName,
   checkPatientSubscription,
@@ -73,7 +74,7 @@ exports.subscribeToDoctor = asyncHandler(async (req, res, next) => {
 exports.updatePatientName = asyncHandler(async (req, res, next) => {
   const decodedToken = await verifyJWT(req.cookies.accessToken);
 
-  const patientDoctor = await findPatientById(
+  const patientDoctor = await findPatientDoctorRelation(
     req.params.patientId,
     decodedToken.userId
   );
@@ -95,17 +96,22 @@ exports.updatePatientName = asyncHandler(async (req, res, next) => {
 exports.sendNotification = asyncHandler(async (req, res, next) => {
   if (!req.body) return next(new httpErrors(400, 'Invalid request'));
 
-  const decodedToken = await verifyJWT(req.cookies.accessToken);
-
-  const patient = await findPatientById(req.params.patientId);
-
-  if (!patient) return next(new httpErrors(404, 'Patient not found.'));
-
-  if (patient.doctorId.toString() !== decodedToken.userId)
-    return next(new httpErrors(403, 'Forbidden.'));
-
   const { error } = validateNotificationInputs(req.body);
   if (error) return next(new httpErrors(400, error.details[0].message));
+
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
+
+  const patientDoctor = await findPatientDoctorRelation(
+    req.params.patientId,
+    decodedToken.userId
+  );
+
+  if (!patientDoctor) return next(new httpErrors(404, 'Patient not found.'));
+
+  if (patientDoctor.doctorId.toString() !== decodedToken.userId)
+    return next(new httpErrors(403, 'Forbidden.'));
+
+  const patient = await findPatientById(patientDoctor.patientId);
 
   await sendMail(patient.email, req.body.message);
 
