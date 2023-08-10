@@ -40,7 +40,7 @@ app.use(xss());
 app.use(helmet());
 
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/user', user);
+app.use('/api/v1/users', user);
 
 app.use((req, res) => {
   return res.status(404).json({

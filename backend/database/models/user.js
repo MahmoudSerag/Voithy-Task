@@ -17,3 +17,11 @@ exports.getUserProfile = asyncHandler(async (userId, role) => {
     })
     .lean();
 });
+
+exports.getAllDoctors = asyncHandler(async (page, limit) => {
+  return await Doctor.find()
+    .select('-password -role -createdAt -updatedAt -__v')
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean();
+});
