@@ -29,12 +29,6 @@ const PatientSchema = new mongoose.Schema(
       required: true,
       enum: ['doctor', 'patient'],
     },
-    doctorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: false,
-      index: true,
-      ref: 'Doctor',
-    },
   },
   { timestamps: true }
 );
