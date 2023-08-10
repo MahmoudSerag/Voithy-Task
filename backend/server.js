@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const auth = require('./routes/auth');
+const user = require('./routes/user');
 
 const { handleError } = require('./middlewares/errorHandling');
 
@@ -39,6 +40,7 @@ app.use(xss());
 app.use(helmet());
 
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/user', user);
 
 app.use((req, res) => {
   return res.status(404).json({

@@ -8,5 +8,5 @@ exports.signJWT = asyncHandler((payload) => {
 });
 
 exports.verifyJWT = asyncHandler(async (accessToken) => {
-  return JWT.verify(token, process.env.JWT_SECRET);
+  return JWT.verify(accessToken, process.env.JWT_SECRET);
 });

@@ -62,7 +62,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   if (!user || !(await comparePassword(req.body.password, user.password)))
     return next(new httpErrors(401, 'Invalid credentials.'));
 
-  const payload = { user: user._id, role: user.role, email: user.email };
+  const payload = { userId: user._id, role: user.role, email: user.email };
   const accessToken = await signJWT(payload);
 
   const cookieExpiredAt = new Date(
