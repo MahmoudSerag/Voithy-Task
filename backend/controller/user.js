@@ -11,10 +11,17 @@ const { verifyJWT } = require('../utils/jwtService');
 const { hashPassword, comparePassword } = require('../utils/passwordService');
 
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
+  const page = Number(req.query.page) || 1,
+    limit = 10;
   const accessToken = req.cookies.accessToken;
   const decodedToken = await verifyJWT(accessToken);
 
-  const user = await getUserProfile(decodedToken.userId, decodedToken.role);
+  const user = await getUserProfile(
+    decodedToken.userId,
+    decodedToken.role,
+    page,
+    limit
+  );
 
   return res.status(200).json({
     success: true,
