@@ -21,13 +21,8 @@ app.use(
   cors({
     origin: process.env.CLIENT_DOMAIN,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowHeaders: [
-      'Content-Type',
-      'Authorization',
-      'Accept',
-      'Application/json',
-    ],
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     preflightContinue: false,
     optionsSuccessStatus: 200,
   })
