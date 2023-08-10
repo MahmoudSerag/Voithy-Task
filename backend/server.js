@@ -6,6 +6,8 @@ const xss = require('xss-clean');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
+const auth = require('./routes/auth');
+
 const { handleError } = require('./middlewares/errorHandling');
 
 dotenv.config();
@@ -35,6 +37,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(xss());
 app.use(helmet());
+
+app.use('/api/v1/auth', auth);
 
 app.use((req, res) => {
   return res.status(404).json({
