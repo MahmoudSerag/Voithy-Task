@@ -24,6 +24,7 @@ exports.validatePatientInputs = (body) => {
     lastName: Joi.string().min(3).required(),
     email: Joi.string().required().email(),
     password: Joi.string().min(6).required(),
+    licenseId: Joi.string().optional(),
     role: Joi.string().valid('patient').required(),
     phoneNumber: Joi.string()
       .pattern(/^01[0125][0-9]{8}$/)
