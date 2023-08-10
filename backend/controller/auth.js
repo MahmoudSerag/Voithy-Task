@@ -76,3 +76,16 @@ exports.login = asyncHandler(async (req, res, next) => {
     message: `User logged in successfully.`,
   });
 });
+
+exports.logout = asyncHandler(async (req, res, next) => {
+  if (!req.cookies.accessToken)
+    return next(new httpErrors(406, 'Already logged out.'));
+
+  res.clearCookie('accessToken');
+
+  return res.status(201).json({
+    success: true,
+    statusCode: 201,
+    message: 'User logged out successfully.',
+  });
+});
