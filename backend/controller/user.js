@@ -17,17 +17,9 @@ const {
 } = require('../utils/inputsValidationService');
 
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
-  const page = Number(req.query.page) || 1,
-    limit = 10;
-
   const decodedToken = await verifyJWT(req.cookies.accessToken);
 
-  const user = await getUserProfile(
-    decodedToken.userId,
-    decodedToken.role,
-    page,
-    limit
-  );
+  const user = await getUserProfile(decodedToken.userId, decodedToken.role);
 
   return res.status(200).json({
     success: true,
@@ -38,10 +30,7 @@ exports.getUserProfile = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllDoctors = asyncHandler(async (req, res, next) => {
-  const page = Number(req.query.page) || 1,
-    limit = 10;
-
-  const doctors = await getAllDoctors(page, limit);
+  const doctors = await getAllDoctors();
 
   return res.status(200).json({
     success: true,

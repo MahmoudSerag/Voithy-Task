@@ -1,10 +1,9 @@
 const asyncHandler = require('../../middlewares/async');
 const Doctor = require('../schemas/doctor');
-const patient = require('../schemas/patient');
 const Patient = require('../schemas/patient');
 const PatientDoctor = require('../schemas/PatientDoctor');
 
-exports.getUserProfile = asyncHandler(async (userId, role, page, limit) => {
+exports.getUserProfile = asyncHandler(async (userId, role) => {
   if (role === 'doctor') {
     const doctor = await Doctor.findById({ _id: userId })
       .select('-password -role -createdAt -updatedAt -__v')
@@ -17,8 +16,6 @@ exports.getUserProfile = asyncHandler(async (userId, role, page, limit) => {
         select: 'firstName lastName phoneNumber email',
         model: Patient,
       })
-      .skip((page - 1) * limit)
-      .limit(limit)
       .lean();
 
     const patientsInfo = [];
@@ -38,11 +35,9 @@ exports.getUserProfile = asyncHandler(async (userId, role, page, limit) => {
   return patient;
 });
 
-exports.getAllDoctors = asyncHandler(async (page, limit) => {
+exports.getAllDoctors = asyncHandler(async () => {
   return await Doctor.find()
     .select('-password -role -createdAt -updatedAt -__v')
-    .skip((page - 1) * limit)
-    .limit(limit)
     .lean();
 });
 
