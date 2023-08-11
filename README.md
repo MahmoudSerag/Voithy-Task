@@ -25,7 +25,7 @@
 ## Screens
 
 <p align="center">
-  <img src="https://media.discordapp.net/attachments/443058700396265472/1139359211034251294/image.png?width=932&height=419" alt="Sign in" width="400" style="margin-right: 100px;margin-bottom: 80px;" />
+  <img src="https://media.discordapp.net/attachments/443058700396265472/1139359211034251294/image.png?width=932&height=419" alt="Sign in" width="400" style="margin-right: 150px;margin-bottom: 120px;" />
   <img src="https://media.discordapp.net/attachments/443058700396265472/1139359445906882660/image.png?width=594&height=419" alt="Sign up" width="400" />
 </p>
 
