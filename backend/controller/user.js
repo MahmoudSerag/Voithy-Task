@@ -6,6 +6,7 @@ const {
   findPatientById,
   updatePatientName,
   checkPatientSubscription,
+  getPatientDetails,
 } = require('../database/models/user');
 const httpErrors = require('http-errors');
 const asyncHandler = require('../middlewares/async');
@@ -79,6 +80,29 @@ exports.updatePatientName = asyncHandler(async (req, res, next) => {
     success: true,
     statusCode: 201,
     message: 'Patient info updated successfully.',
+  });
+});
+
+exports.getPatientDetails = asyncHandler(async (req, res, next) => {
+  const decodedToken = await verifyJWT(req.cookies.accessToken);
+
+  const patient = await getPatientDetails(
+    decodedToken.userId,
+    req.params.patientId
+  );
+
+  if (!patient) return next(new httpErrors(404, 'Patient not found.'));
+
+  if (patient.doctorId.toString() !== decodedToken.userId)
+    return next(new httpErrors(403, 'Forbidden.'));
+
+  delete patient.doctorId;
+
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: 'Patient info fetched successfully.',
+    patient,
   });
 });
 

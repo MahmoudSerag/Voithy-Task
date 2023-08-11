@@ -58,6 +58,22 @@ exports.findPatientDoctorRelation = asyncHandler(
   }
 );
 
+exports.getPatientDetails = asyncHandler(async (doctorId, patientId) => {
+  const patientInfo = await PatientDoctor.findOne({ doctorId, patientId })
+    .select('-__v -updatedAt -createdAt -_id')
+    .populate({
+      path: 'patientId',
+      select: 'firstName lastName phoneNumber email _id',
+      model: Patient,
+    })
+    .lean();
+
+  patientInfo.patient = patientInfo.patientId;
+  delete patientInfo.patientId;
+
+  return patientInfo;
+});
+
 exports.findPatientById = asyncHandler(async (patientId) => {
   return await Patient.findById({ _id: patientId }).lean();
 });
