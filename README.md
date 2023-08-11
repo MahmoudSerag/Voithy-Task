@@ -46,14 +46,19 @@
 - 📊 MongoDB database and Mongoose ORM.
 - 💲Subscription system.
 
-## Installation
+## Build Installation
 
 ```bash
 $ git clone https://github.com/MahmoudSerag/Voithy-Task.git
 $ cd Voithy-Task
-$ npm install
-$ cd frontend
-$ npm install
+$ npm run build
+```
+
+## Seed Database
+
+```bash
+$ npm run data:import
+$ npm run data:destroy
 ```
 
 ## Running the app
