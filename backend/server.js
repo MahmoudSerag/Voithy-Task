@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const { connectDB } = require('./config/db');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -36,6 +37,17 @@ app.use(helmet());
 
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/dist')));
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+  );
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
+}
 
 app.use((req, res) => {
   return res.status(404).json({
