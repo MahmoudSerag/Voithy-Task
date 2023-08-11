@@ -74,6 +74,11 @@ exports.login = asyncHandler(async (req, res, next) => {
     success: true,
     statusCode: 201,
     message: `User logged in successfully.`,
+    user: {
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
   });
 });
 
